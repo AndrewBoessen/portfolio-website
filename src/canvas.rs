@@ -130,4 +130,31 @@ mod hopfield_canvas {
             self.grids.get_mut(index)
         }
     }
+
+    pub fn gen_image(height: u32, width: u32) -> Vec<Cell> {
+        let mut rng = rand::thread_rng();
+        // linspace for border gradients
+        let gradient: Vec<f32> = (0..width / 4)
+            .map(|i| i as f32 / (width / 4 - 1) as f32)
+            .collect();
+        let reverse_grad: Vec<f32> = gradient.iter().rev().cloned().collect();
+        let blank: Vec<f32> = vec![1.0; width as usize / 2];
+
+        let probs: Vec<f32> = [gradient, blank, reverse_grad].concat();
+
+        // pixel values of image {-1,1}
+        let mut pixel_vals = vec![Cell::default(); (width * height) as usize];
+
+        // populate pixel vals according to gradient disttribution
+        for (i, pixel) in pixel_vals.iter_mut().enumerate() {
+            *pixel = if rng.gen::<f32>() < probs[i % width as usize] {
+                Cell::White
+            } else {
+                Cell::Black
+            };
+        }
+
+        // return pixels
+        pixel_vals
+    }
 }
