@@ -142,17 +142,17 @@ mod hopfield_canvas {
 
         let probs: Vec<f32> = [gradient, blank, reverse_grad].concat();
 
-        // pixel values of image {-1,1}
-        let mut pixel_vals = vec![Cell::default(); (width * height) as usize];
+        // Pixel values of image {-1,1}
+        // Pre-allocate with capacity for better performance
+        let mut pixel_vals = Vec::with_capacity((width * height) as usize);
 
-        // populate pixel vals according to gradient disttribution
-        for (i, pixel) in pixel_vals.iter_mut().enumerate() {
-            *pixel = if rng.gen::<f32>() < probs[i % width as usize] {
+        pixel_vals.extend((0..width * height).map(|i| {
+            if rng.gen::<f32>() < probs[i as usize % width as usize] {
                 Cell::White
             } else {
                 Cell::Black
-            };
-        }
+            }
+        }));
 
         // return pixels
         pixel_vals
