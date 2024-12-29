@@ -1,4 +1,5 @@
 mod hopfield_canvas {
+    use ::std::ops::Mul;
     use rand::Rng;
     use thiserror::Error;
     use wasm_bindgen::prelude::*;
@@ -16,7 +17,40 @@ mod hopfield_canvas {
             Cell::White
         }
     }
+    // Implement Mul for Cell * Cell
+    impl Mul for Cell {
+        type Output = Self;
 
+        fn mul(self, rhs: Self) -> Self::Output {
+            match (self as i8) * (rhs as i8) {
+                1 => Cell::White,
+                -1 => Cell::Black,
+                _ => unreachable!("Product of -1 and 1 can only be -1 or 1"),
+            }
+        }
+    }
+
+    // Implement Mul for Cell * i8
+    impl Mul<i8> for Cell {
+        type Output = Self;
+
+        fn mul(self, rhs: i8) -> Self::Output {
+            match (self as i8) * rhs {
+                x if x > 0 => Cell::White,
+                x if x < 0 => Cell::Black,
+                _ => Cell::Black, // Handle multiplication by 0
+            }
+        }
+    }
+
+    // Implement Mul for i8 * Cell
+    impl Mul<Cell> for i8 {
+        type Output = Cell;
+
+        fn mul(self, rhs: Cell) -> Cell {
+            rhs * self
+        }
+    }
     #[derive(Error, Debug)]
     pub enum CanvasError {
         #[error("Canvas width {0} is not divisible by grid width {1}")]
@@ -108,6 +142,22 @@ mod hopfield_canvas {
                 height,
                 grids,
             })
+        }
+
+        pub fn step(&mut self, image: Vec<Cell>) -> bool {
+            let stable: bool = true;
+            // async update each grid
+            for (index, grid) in self.grids.iter_mut().enumerate() {
+                for i in 0..self.grid_height {
+                    for j in 0..self.grid_width {
+                        let grid_start: usize =
+                            (index as u32 * self.grid_height * self.grid_width) as usize;
+                        let w = image[grid_start + i as usize] * image[grid_start + j as usize];
+                    }
+                }
+            }
+
+            stable
         }
 
         pub fn randomize(&mut self) {
