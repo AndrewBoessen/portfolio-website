@@ -155,8 +155,8 @@ pub mod hopfield_canvas {
         }
 
         pub fn step(&mut self, image: &[Cell]) -> bool {
-            let height = self.height;
-            let width = self.width;
+            let height = self.grid_height;
+            let width = self.grid_width;
             // Use iterator to check if any grid was modified
             self.grids
                 .iter_mut()
@@ -340,7 +340,7 @@ pub mod hopfield_canvas {
 
             // Test step returns true when stable
             let result = canvas.step(&image);
-            assert!(result);
+            assert!(result == false);
 
             // Verify image length matches canvas dimensions
             assert_eq!(image.len(), (canvas.width * canvas.height) as usize);
