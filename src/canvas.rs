@@ -1,6 +1,6 @@
-mod hopfield_canvas {
-    use ::std::ops::Mul;
+pub mod hopfield_canvas {
     use rand::Rng;
+    use std::ops::Mul;
     use thiserror::Error;
     use wasm_bindgen::prelude::*;
 
@@ -245,5 +245,137 @@ mod hopfield_canvas {
 
         // return pixels
         pixel_vals
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        use wasm_bindgen_test::*;
+
+        wasm_bindgen_test_configure!(run_in_browser);
+
+        #[test]
+        fn test_cell_operations() {
+            // Test cell default
+            assert_eq!(Cell::default(), Cell::White);
+
+            // Test cell flip
+            assert_eq!(Cell::White.flip(), Cell::Black);
+            assert_eq!(Cell::Black.flip(), Cell::White);
+
+            // Test cell multiplication
+            assert_eq!(Cell::White * Cell::White, Cell::White);
+            assert_eq!(Cell::Black * Cell::Black, Cell::White);
+            assert_eq!(Cell::White * Cell::Black, Cell::Black);
+            assert_eq!(Cell::Black * Cell::White, Cell::Black);
+
+            // Test cell multiplication with i8
+            assert_eq!(Cell::White * 1_i8, Cell::White);
+            assert_eq!(Cell::White * -1_i8, Cell::Black);
+            assert_eq!(Cell::Black * 1_i8, Cell::Black);
+            assert_eq!(Cell::Black * -1_i8, Cell::White);
+            assert_eq!(Cell::White * 0_i8, Cell::Black); // Test zero case
+        }
+
+        #[test]
+        fn test_grid_creation() {
+            let grid = Grid::new(3, 4);
+            assert_eq!(grid.width, 3);
+            assert_eq!(grid.height, 4);
+            assert_eq!(grid.cells.len(), 12);
+
+            // Test all cells are initialized to default (White)
+            assert!(grid.cells.iter().all(|&cell| cell == Cell::default()));
+        }
+
+        #[test]
+        fn test_grid_cell_operations() {
+            let mut grid = Grid::new(3, 3);
+
+            // Test get_cell
+            assert_eq!(grid.get_cell(0, 0), Some(Cell::White));
+            assert_eq!(grid.get_cell(2, 2), Some(Cell::White));
+            assert_eq!(grid.get_cell(3, 3), None);
+
+            // Test set_cell
+            assert!(grid.set_cell(1, 1, Cell::Black));
+            assert_eq!(grid.get_cell(1, 1), Some(Cell::Black));
+
+            // Test setting out of bounds
+            assert!(!grid.set_cell(3, 3, Cell::Black));
+        }
+
+        #[test]
+        fn test_canvas_creation() {
+            // Test valid canvas creation
+            let canvas = Canvas::new(100, 100, 10, 10);
+            assert!(canvas.is_ok());
+            let canvas = canvas.unwrap();
+            assert_eq!(canvas.grids.len(), 100);
+
+            // Test invalid dimensions
+            let invalid_canvas = Canvas::new(100, 100, 15, 15);
+            assert!(matches!(
+                invalid_canvas,
+                Err(CanvasError::InvalidWidth(100, 15))
+            ));
+        }
+
+        #[test]
+        fn test_canvas_grid_access() {
+            let canvas = Canvas::new(100, 100, 10, 10).unwrap();
+
+            // Test valid grid access
+            assert!(canvas.get_grid(5, 5).is_some());
+            assert!(canvas.get_grid(95, 95).is_some());
+
+            // Test out of bounds access
+            assert!(canvas.get_grid(100, 100).is_none());
+        }
+
+        #[test]
+        fn test_canvas_step() {
+            let mut canvas = Canvas::new(20, 20, 10, 10).unwrap();
+            let image = gen_image(20, 20);
+
+            // Test step returns true when stable
+            let result = canvas.step(&image);
+            assert!(result);
+
+            // Verify image length matches canvas dimensions
+            assert_eq!(image.len(), (canvas.width * canvas.height) as usize);
+        }
+
+        #[test]
+        fn test_image_generation() {
+            let width = 20;
+            let height = 15;
+            let image = gen_image(height, width);
+
+            // Check dimensions
+            assert_eq!(image.len(), (width * height) as usize);
+
+            // Verify all cells are valid
+            assert!(image
+                .iter()
+                .all(|&cell| cell == Cell::White || cell == Cell::Black));
+        }
+
+        #[test]
+        fn test_grid_randomization() {
+            let mut grid = Grid::new(5, 5);
+            let initial_state: Vec<Cell> = grid.cells.clone();
+
+            grid.randomize();
+
+            // Test that cells have changed (note: this could theoretically fail with very low probability)
+            assert_ne!(grid.cells, initial_state);
+
+            // Test that all cells are valid
+            assert!(grid
+                .cells
+                .iter()
+                .all(|&cell| cell == Cell::White || cell == Cell::Black));
+        }
     }
 }
