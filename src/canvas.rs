@@ -17,6 +17,16 @@ mod hopfield_canvas {
             Cell::White
         }
     }
+
+    impl Cell {
+        fn flip(self) -> Self {
+            match self {
+                Cell::White => Cell::Black,
+                Cell::Black => Cell::White,
+            }
+        }
+    }
+
     // Implement Mul for Cell * Cell
     impl Mul for Cell {
         type Output = Self;
@@ -144,20 +154,49 @@ mod hopfield_canvas {
             })
         }
 
-        pub fn step(&mut self, image: Vec<Cell>) -> bool {
-            let stable: bool = true;
-            // async update each grid
-            for (index, grid) in self.grids.iter_mut().enumerate() {
-                for i in 0..self.grid_height {
-                    for j in 0..self.grid_width {
-                        let grid_start: usize =
-                            (index as u32 * self.grid_height * self.grid_width) as usize;
-                        let w = image[grid_start + i as usize] * image[grid_start + j as usize];
-                    }
-                }
-            }
+        pub fn step(&mut self, image: &[Cell]) -> bool {
+            let height = self.height;
+            let width = self.width;
+            // Use iterator to check if any grid was modified
+            self.grids
+                .iter_mut()
+                .enumerate()
+                .fold(true, |stable, (index, grid)| {
+                    let grid_start = (index as u32 * width * height) as usize;
+                    let grid_slice = &image[grid_start..grid_start + (width * height) as usize];
 
-            stable
+                    // Find cell with minimum energy
+                    let (min_index, min_energy) = (0..grid.cells.len())
+                        .map(|i| {
+                            let energy = Self::calculate_cell_energy(i, grid_slice, &grid.cells);
+                            (i, energy)
+                        })
+                        .min_by_key(|&(_, energy)| energy)
+                        .unwrap();
+
+                    // Update cell if energy is negative
+                    if min_energy < 0 {
+                        grid.cells[min_index] = grid.cells[min_index].flip();
+                        stable && false
+                    } else {
+                        stable
+                    }
+                })
+        }
+
+        // Helper function to calculate energy for a single cell
+        fn calculate_cell_energy(i: usize, image: &[Cell], cells: &[Cell]) -> i32 {
+            let (energy, bias) =
+                image
+                    .iter()
+                    .enumerate()
+                    .fold((0, 0), |(energy, bias), (j, &w)| {
+                        let w_val = (w * image[i]) as i32;
+                        (energy + (w_val * cells[j] as i32), bias + w_val)
+                    });
+
+            // ΔE_i = -2 * y_i * (∑_j w_ij * y_j + b_i)
+            -2 * cells[i] as i32 * (energy + bias)
         }
 
         pub fn randomize(&mut self) {
