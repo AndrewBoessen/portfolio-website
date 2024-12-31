@@ -186,17 +186,13 @@ pub mod hopfield_canvas {
 
         // Helper function to calculate energy for a single cell
         fn calculate_cell_energy(i: usize, image: &[Cell], cells: &[Cell]) -> i32 {
-            let (energy, bias) =
-                image
-                    .iter()
-                    .enumerate()
-                    .fold((0, 0), |(energy, bias), (j, &w)| {
-                        let w_val = (w * image[i]) as i32;
-                        (energy + (w_val * cells[j] as i32), bias + w_val)
-                    });
+            let energy = image.iter().enumerate().fold(0, |energy, (j, &w)| {
+                let w_val = (w * image[i]) as i32;
+                energy + (w_val * cells[j] as i32)
+            });
 
             // ΔE_i = -2 * y_i * (∑_j w_ij * y_j + b_i)
-            -2 * cells[i] as i32 * (energy + bias)
+            -2 * cells[i] as i32 * (energy + image[i] as i32)
         }
 
         pub fn randomize(&mut self) {
