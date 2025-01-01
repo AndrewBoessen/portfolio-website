@@ -1,7 +1,6 @@
 pub mod hopfield_canvas {
     use rand::Rng;
     use std::ops::Mul;
-    use thiserror::Error;
     use wasm_bindgen::prelude::*;
 
     #[wasm_bindgen]
@@ -18,6 +17,7 @@ pub mod hopfield_canvas {
         }
     }
 
+    #[wasm_bindgen]
     impl Cell {
         fn flip(self) -> Self {
             match self {
@@ -61,13 +61,6 @@ pub mod hopfield_canvas {
             rhs * self
         }
     }
-    #[derive(Error, Debug)]
-    pub enum CanvasError {
-        #[error("Canvas width {0} is not divisible by grid width {1}")]
-        InvalidWidth(u32, u32),
-        #[error("Canvas height {0} is not divisible by grid height {1}")]
-        InvalidHeight(u32, u32),
-    }
 
     #[wasm_bindgen]
     #[derive(Clone, Debug)]
@@ -77,6 +70,7 @@ pub mod hopfield_canvas {
         cells: Vec<Cell>,
     }
 
+    #[wasm_bindgen]
     impl Grid {
         pub fn new(width: u32, height: u32) -> Self {
             let cells = vec![Cell::default(); (width * height) as usize];
@@ -84,23 +78,6 @@ pub mod hopfield_canvas {
                 width,
                 height,
                 cells,
-            }
-        }
-
-        pub fn get_cell(&self, x: u32, y: u32) -> Option<Cell> {
-            if x >= self.width || y >= self.height {
-                None
-            } else {
-                Some(self.cells[(y * self.width + x) as usize])
-            }
-        }
-
-        pub fn set_cell(&mut self, x: u32, y: u32, cell: Cell) -> bool {
-            if x >= self.width || y >= self.height {
-                false
-            } else {
-                self.cells[(y * self.width + x) as usize] = cell;
-                true
             }
         }
 
@@ -126,35 +103,24 @@ pub mod hopfield_canvas {
         grids: Vec<Grid>,
     }
 
+    #[wasm_bindgen]
     impl Canvas {
-        pub fn new(
-            width: u32,
-            height: u32,
-            grid_height: u32,
-            grid_width: u32,
-        ) -> Result<Self, CanvasError> {
-            if width % grid_width != 0 {
-                return Err(CanvasError::InvalidWidth(width, grid_width));
-            }
-            if height % grid_height != 0 {
-                return Err(CanvasError::InvalidHeight(height, grid_height));
-            }
-
+        pub fn new(width: u32, height: u32, grid_height: u32, grid_width: u32) -> Self {
             let grid_count = (width / grid_width) * (height / grid_height);
             let grids = (0..grid_count)
                 .map(|_| Grid::new(grid_width, grid_height))
                 .collect();
 
-            Ok(Self {
+            Self {
                 grid_width,
                 grid_height,
                 width,
                 height,
                 grids,
-            })
+            }
         }
 
-        pub fn step(&mut self, image: &[Cell]) -> bool {
+        pub fn step(&mut self, image: Vec<Cell>) -> bool {
             let height = self.grid_height;
             let width = self.grid_width;
             // Use iterator to check if any grid was modified
@@ -199,20 +165,6 @@ pub mod hopfield_canvas {
             for grid in &mut self.grids {
                 grid.randomize();
             }
-        }
-
-        pub fn get_grid(&self, x: u32, y: u32) -> Option<&Grid> {
-            let grid_x = x / self.grid_width;
-            let grid_y = y / self.grid_height;
-            let index = (grid_y * (self.width / self.grid_width) + grid_x) as usize;
-            self.grids.get(index)
-        }
-
-        pub fn get_grid_mut(&mut self, x: u32, y: u32) -> Option<&mut Grid> {
-            let grid_x = x / self.grid_width;
-            let grid_y = y / self.grid_height;
-            let index = (grid_y * (self.width / self.grid_width) + grid_x) as usize;
-            self.grids.get_mut(index)
         }
     }
 
@@ -285,53 +237,15 @@ pub mod hopfield_canvas {
         }
 
         #[test]
-        fn test_grid_cell_operations() {
-            let mut grid = Grid::new(3, 3);
-
-            // Test get_cell
-            assert_eq!(grid.get_cell(0, 0), Some(Cell::White));
-            assert_eq!(grid.get_cell(2, 2), Some(Cell::White));
-            assert_eq!(grid.get_cell(3, 3), None);
-
-            // Test set_cell
-            assert!(grid.set_cell(1, 1, Cell::Black));
-            assert_eq!(grid.get_cell(1, 1), Some(Cell::Black));
-
-            // Test setting out of bounds
-            assert!(!grid.set_cell(3, 3, Cell::Black));
-        }
-
-        #[test]
         fn test_canvas_creation() {
             // Test valid canvas creation
             let canvas = Canvas::new(100, 100, 10, 10);
-            assert!(canvas.is_ok());
-            let canvas = canvas.unwrap();
             assert_eq!(canvas.grids.len(), 100);
-
-            // Test invalid dimensions
-            let invalid_canvas = Canvas::new(100, 100, 15, 15);
-            assert!(matches!(
-                invalid_canvas,
-                Err(CanvasError::InvalidWidth(100, 15))
-            ));
-        }
-
-        #[test]
-        fn test_canvas_grid_access() {
-            let canvas = Canvas::new(100, 100, 10, 10).unwrap();
-
-            // Test valid grid access
-            assert!(canvas.get_grid(5, 5).is_some());
-            assert!(canvas.get_grid(95, 95).is_some());
-
-            // Test out of bounds access
-            assert!(canvas.get_grid(100, 100).is_none());
         }
 
         #[test]
         fn test_canvas_step() {
-            let mut canvas = Canvas::new(20, 20, 10, 10).unwrap();
+            let mut canvas = Canvas::new(20, 20, 10, 10);
             let image = gen_image(20, 20);
 
             // Test step returns true when stable

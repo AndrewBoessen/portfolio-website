@@ -1,6 +1,7 @@
 pub mod canvas;
 mod utils;
 
+use crate::canvas::hopfield_canvas::{Canvas, Cell};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]

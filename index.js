@@ -1,16 +1,21 @@
-import { Canvas, Cell } from "./pkg/website";
+import { Canvas, Cell } from "website";
 // Import the WebAssembly memory at the top of the file.
-import { memory } from "./pkg/website_bg";
+import { memory } from "website/website_bg";
 
 const CELL_SIZE = 5; // px
 const GRID_COLOR = "#CCCCCC";
 const NEGATIVE_COLOR = "#FFFFFF";
 const POSITIVE_COLOR = "#000000";
 
+const WIDTH = 96;
+const HEIGHT = 32;
+const GRID_WIDTH = 8;
+const GRID_HEIGHT = 8;
+
 // Construct the canvas, and get its width and height.
-const hopfield_canvas = Canvas.new();
-const width = hopfield_canvas.width();
-const height = hopfield_canvas.height();
+const hopfield_canvas = Canvas.new(WIDTH, HEIGHT, GRID_HEIGHT, GRID_WIDTH);
+const width = WIDTH;
+const height = HEIGHT;
 
 // Give the canvas room for all of our cells and a 1px border
 // around each of them.
@@ -77,3 +82,7 @@ const drawCells = () => {
 
   ctx.stroke();
 };
+
+drawGrid();
+drawCells();
+requestAnimationFrame(renderLoop);
