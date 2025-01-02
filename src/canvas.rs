@@ -143,8 +143,8 @@ pub mod hopfield_canvas {
             self.width
         }
 
-        pub fn grids_ptr(&self) -> *const Grid {
-            self.grids.as_ptr()
+        pub fn get_grids_cells(&self, index: usize) -> *const Cell {
+            self.grids[index].cells_ptr()
         }
 
         pub fn grids_len(&self) -> usize {

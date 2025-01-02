@@ -58,14 +58,11 @@ const getIndex = (row, column) => {
 };
 
 const drawCells = () => {
-  const gridsPtr = hopfield_canvas.grids_ptr();
   const gridsLen = hopfield_canvas.grids_len();
   // loop over grids
   for (let i = 0; i < gridsLen; i++) {
-    const gridPtr = gridsPtr + i;
-    const cellsPtr = view.getUint32(gridPtr, true);
-    const cellsLength = view.getBigUint64(gridPtr + 8, true);
-    const cells = new Uint8Array(memory.buffer, cellsPtr, cellsLength);
+    const cellsPtr = hopfield_canvas.get_grids_cells(i);
+    const cells = new Uint8Array(memory.buffer, cellsPtr, GRID_WIDTH * GRID_HEIGHT);
   }
 
   ctx.beginPath();
