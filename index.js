@@ -14,14 +14,14 @@ const GRID_HEIGHT = 8;
 
 // Construct the canvas, and get its width and height.
 const hopfield_canvas = Canvas.new(WIDTH, HEIGHT, GRID_HEIGHT, GRID_WIDTH);
-const width = WIDTH;
-const height = HEIGHT;
+const width = hopfield_canvas.width();
+const height = hopfield_canvas.height();
 
 // Give the canvas room for all of our cells and a 1px border
 // around each of them.
-const canvas = document.getElementById("game-of-life-canvas");
-canvas.height = (CELL_SIZE + 1) * height + 1;
-canvas.width = (CELL_SIZE + 1) * width + 1;
+const canvas = document.getElementById("hopfield-canvas");
+canvas.height = (GRID_WIDTH * GRID_HEIGHT) * (CELL_SIZE + 1) * height + 1;
+canvas.width = (GRID_WIDTH * GRID_HEIGHT) * (CELL_SIZE + 1) * width + 1;
 
 const ctx = canvas.getContext('2d');
 
@@ -58,8 +58,15 @@ const getIndex = (row, column) => {
 };
 
 const drawCells = () => {
-  const cellsPtr = universe.cells();
-  const cells = new Uint8Array(memory.buffer, cellsPtr, width * height);
+  const gridsPtr = hopfield_canvas.grids_ptr();
+  const gridsLen = hopfield_canvas.grids_len();
+  // loop over grids
+  for (let i = 0; i < gridsLen; i++) {
+    const gridPtr = gridsPtr + i;
+    const cellsPtr = view.getUint32(gridPtr, true);
+    const cellsLength = view.getBigUint64(gridPtr + 8, true);
+    const cells = new Uint8Array(memory.buffer, cellsPtr, cellsLength);
+  }
 
   ctx.beginPath();
 

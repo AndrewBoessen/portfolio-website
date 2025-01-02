@@ -65,9 +65,9 @@ pub mod hopfield_canvas {
     #[wasm_bindgen]
     #[derive(Clone, Debug)]
     pub struct Grid {
+        cells: Vec<Cell>,
         width: u32,
         height: u32,
-        cells: Vec<Cell>,
     }
 
     #[wasm_bindgen]
@@ -75,12 +75,27 @@ pub mod hopfield_canvas {
         pub fn new(width: u32, height: u32) -> Self {
             let cells = vec![Cell::default(); (width * height) as usize];
             Self {
+                cells,
                 width,
                 height,
-                cells,
             }
         }
 
+        pub fn cells_ptr(&self) -> *const Cell {
+            self.cells.as_ptr()
+        }
+
+        pub fn cells_len(&self) -> usize {
+            self.cells.len()
+        }
+
+        pub fn width(&self) -> u32 {
+            self.width
+        }
+
+        pub fn height(&self) -> u32 {
+            self.height
+        }
         pub fn randomize(&mut self) {
             let mut rng = rand::thread_rng();
             for cell in &mut self.cells {
@@ -96,10 +111,10 @@ pub mod hopfield_canvas {
     #[wasm_bindgen]
     #[derive(Clone, Debug)]
     pub struct Canvas {
-        grid_width: u32,
-        grid_height: u32,
         width: u32,
         height: u32,
+        grid_width: u32,
+        grid_height: u32,
         grids: Vec<Grid>,
     }
 
@@ -112,12 +127,28 @@ pub mod hopfield_canvas {
                 .collect();
 
             Self {
-                grid_width,
-                grid_height,
                 width,
                 height,
+                grid_width,
+                grid_height,
                 grids,
             }
+        }
+
+        pub fn height(&self) -> u32 {
+            self.height
+        }
+
+        pub fn width(&self) -> u32 {
+            self.width
+        }
+
+        pub fn grids_ptr(&self) -> *const Grid {
+            self.grids.as_ptr()
+        }
+
+        pub fn grids_len(&self) -> usize {
+            self.grids.len()
         }
 
         pub fn step(&mut self, image: Vec<Cell>) -> bool {
@@ -247,13 +278,14 @@ pub mod hopfield_canvas {
         fn test_canvas_step() {
             let mut canvas = Canvas::new(20, 20, 10, 10);
             let image = gen_image(20, 20);
+            let image_len: usize = image.len();
 
             // Test step returns true when stable
-            let result = canvas.step(&image);
+            let result = canvas.step(image);
             assert!(result == false);
 
             // Verify image length matches canvas dimensions
-            assert_eq!(image.len(), (canvas.width * canvas.height) as usize);
+            assert_eq!(image_len, (canvas.width * canvas.height) as usize);
         }
 
         #[test]
