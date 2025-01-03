@@ -1,8 +1,10 @@
 [package]
 name = "website"
+description = "Personal website for Andrew Boessen. With hopfield canvas header"
 version = "0.1.0"
 authors = ["Andrew Boessen <boessena@bc.edu>"]
 edition = "2018"
+license = "MIT"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
