@@ -1,4 +1,4 @@
-import { Canvas, Cell } from "website";
+import { Canvas, Cell, gen_image } from "website";
 // Import the WebAssembly memory at the top of the file.
 import { memory } from "website/website_bg";
 
@@ -16,6 +16,8 @@ const GRID_HEIGHT = 8;
 const hopfield_canvas = Canvas.new(WIDTH, HEIGHT, GRID_HEIGHT, GRID_WIDTH);
 const width = hopfield_canvas.width();
 const height = hopfield_canvas.height();
+// init with random states
+hopfield_canvas.randomize();
 
 // Give the canvas room for all of our cells and a 1px border
 // around each of them.
@@ -23,10 +25,12 @@ const canvas = document.getElementById("hopfield-canvas");
 canvas.height = (GRID_WIDTH * GRID_HEIGHT) * (CELL_SIZE + 1) * height + 1;
 canvas.width = (GRID_WIDTH * GRID_HEIGHT) * (CELL_SIZE + 1) * width + 1;
 
+let image = gen_image(height, width);
+
 const ctx = canvas.getContext('2d');
 
 const renderLoop = () => {
-  hopfield_canvas.step();
+  hopfield_canvas.step(image);
 
   drawGrid();
   drawCells();
@@ -59,31 +63,28 @@ const getIndex = (row, column) => {
 
 const drawCells = () => {
   const gridsLen = hopfield_canvas.grids_len();
+  ctx.beginPath();
   // loop over grids
   for (let i = 0; i < gridsLen; i++) {
     const cellsPtr = hopfield_canvas.get_grids_cells(i);
-    const cells = new Uint8Array(memory.buffer, cellsPtr, GRID_WIDTH * GRID_HEIGHT);
-  }
+    const cells = new Int8Array(memory.buffer, cellsPtr, GRID_WIDTH * GRID_HEIGHT);
+    console.log(cells);
+    for (let row = 0; row < GRID_HEIGHT; row++) {
+      for (let col = 0; col < GRID_WIDTH; col++) {
+        const idx = getIndex(row, col);
+        ctx.fillStyle = cells[idx] === Cell.Dead
+          ? NEGATIVE_COLOR
+          : POSITIVE_COLOR;
 
-  ctx.beginPath();
-
-  for (let row = 0; row < height; row++) {
-    for (let col = 0; col < width; col++) {
-      const idx = getIndex(row, col);
-
-      ctx.fillStyle = cells[idx] === Cell.Dead
-        ? DEAD_COLOR
-        : ALIVE_COLOR;
-
-      ctx.fillRect(
-        col * (CELL_SIZE + 1) + 1,
-        row * (CELL_SIZE + 1) + 1,
-        CELL_SIZE,
-        CELL_SIZE
-      );
+        ctx.fillRect(
+          col * (i % width + CELL_SIZE + 1) + 1,
+          row * (i / height + CELL_SIZE + 1) + 1,
+          CELL_SIZE,
+          CELL_SIZE
+        );
+      }
     }
   }
-
   ctx.stroke();
 };
 

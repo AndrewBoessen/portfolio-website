@@ -199,33 +199,6 @@ pub mod hopfield_canvas {
         }
     }
 
-    pub fn gen_image(height: u32, width: u32) -> Vec<Cell> {
-        let mut rng = rand::thread_rng();
-        // linspace for border gradients
-        let gradient: Vec<f32> = (0..width / 4)
-            .map(|i| i as f32 / (width / 4 - 1) as f32)
-            .collect();
-        let reverse_grad: Vec<f32> = gradient.iter().rev().cloned().collect();
-        let blank: Vec<f32> = vec![1.0; width as usize / 2];
-
-        let probs: Vec<f32> = [gradient, blank, reverse_grad].concat();
-
-        // Pixel values of image {-1,1}
-        // Pre-allocate with capacity for better performance
-        let mut pixel_vals = Vec::with_capacity((width * height) as usize);
-
-        pixel_vals.extend((0..width * height).map(|i| {
-            if rng.gen::<f32>() < probs[i as usize % width as usize] {
-                Cell::White
-            } else {
-                Cell::Black
-            }
-        }));
-
-        // return pixels
-        pixel_vals
-    }
-
     #[cfg(test)]
     mod tests {
         use super::*;
@@ -272,35 +245,6 @@ pub mod hopfield_canvas {
             // Test valid canvas creation
             let canvas = Canvas::new(100, 100, 10, 10);
             assert_eq!(canvas.grids.len(), 100);
-        }
-
-        #[test]
-        fn test_canvas_step() {
-            let mut canvas = Canvas::new(20, 20, 10, 10);
-            let image = gen_image(20, 20);
-            let image_len: usize = image.len();
-
-            // Test step returns true when stable
-            let result = canvas.step(image);
-            assert!(result == false);
-
-            // Verify image length matches canvas dimensions
-            assert_eq!(image_len, (canvas.width * canvas.height) as usize);
-        }
-
-        #[test]
-        fn test_image_generation() {
-            let width = 20;
-            let height = 15;
-            let image = gen_image(height, width);
-
-            // Check dimensions
-            assert_eq!(image.len(), (width * height) as usize);
-
-            // Verify all cells are valid
-            assert!(image
-                .iter()
-                .all(|&cell| cell == Cell::White || cell == Cell::Black));
         }
 
         #[test]
