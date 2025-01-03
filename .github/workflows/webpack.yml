@@ -1,5 +1,4 @@
-name: NodeJS with Webpack
-
+name: NodeJS with Webpack and Wasm
 on:
   push:
     branches: [ "main" ]
@@ -9,22 +8,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-
     steps:
     - uses: actions/checkout@v4
-
+    
+    - name: Setup Rust
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Install wasm-pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Build
-      run: |
-        npm install wasm-pack
-        npx wasm-pack build
-        npm install
-        npx webpack
+        cache: 'npm'
+        
+    - name: Build Wasm
+      run: wasm-pack build --target web
+      
+    - name: Install Dependencies
+      run: npm install
+      
+    - name: Build with Webpack
+      run: npx webpack
