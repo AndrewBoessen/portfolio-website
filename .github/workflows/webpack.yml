@@ -27,7 +27,7 @@ jobs:
         cache: 'npm'
         
     - name: Build Wasm
-      run: wasm-pack build --target web
+      run: wasm-pack build --target bundler
       
     - name: Install Dependencies
       run: npm install
