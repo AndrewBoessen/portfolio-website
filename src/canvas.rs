@@ -248,6 +248,56 @@ pub mod hopfield_canvas {
         }
 
         #[test]
+        fn test_grid_cells_ptr_and_len() {
+            let grid = Grid::new(5, 5);
+            let ptr = grid.cells_ptr();
+            let len = grid.cells_len();
+
+            assert!(!ptr.is_null());
+            assert_eq!(len, 25);
+        }
+
+        #[test]
+        fn test_canvas_step() {
+            let mut canvas = Canvas::new(20, 20, 10, 10);
+            let initial_state: Vec<Cell> =
+                canvas.grids.iter().flat_map(|g| g.cells.clone()).collect();
+            let image: Vec<Cell> = vec![Cell::White; 400];
+
+            let stable = canvas.step(image);
+            let final_state: Vec<Cell> =
+                canvas.grids.iter().flat_map(|g| g.cells.clone()).collect();
+
+            assert!(!stable);
+            assert_ne!(initial_state, final_state);
+        }
+
+        #[test]
+        fn test_canvas_randomize() {
+            let mut canvas = Canvas::new(30, 30, 10, 10);
+            let initial_state: Vec<Cell> =
+                canvas.grids.iter().flat_map(|g| g.cells.clone()).collect();
+
+            canvas.randomize();
+            let randomized_state: Vec<Cell> =
+                canvas.grids.iter().flat_map(|g| g.cells.clone()).collect();
+
+            assert_ne!(initial_state, randomized_state);
+        }
+
+        #[test]
+        fn test_calculate_cell_energy() {
+            let image = vec![Cell::White, Cell::Black, Cell::White, Cell::Black];
+            let cells = vec![Cell::White, Cell::White, Cell::Black, Cell::Black];
+
+            let energy = Canvas::calculate_cell_energy(0, &image, &cells);
+            assert_eq!(energy, -2);
+
+            let energy = Canvas::calculate_cell_energy(1, &image, &cells);
+            assert_eq!(energy, 2);
+        }
+
+        #[test]
         fn test_grid_randomization() {
             let mut grid = Grid::new(5, 5);
             let initial_state: Vec<Cell> = grid.cells.clone();

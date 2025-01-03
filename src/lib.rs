@@ -44,20 +44,6 @@ pub fn greet() {
 }
 
 #[test]
-fn test_canvas_step() {
-    let mut canvas = Canvas::new(20, 20, 10, 10);
-    let image = gen_image(20, 20);
-    let image_len: usize = image.len();
-
-    // Test step returns true when stable
-    let result = canvas.step(image);
-    assert!(result == false);
-
-    // Verify image length matches canvas dimensions
-    assert_eq!(image_len, (20 * 20) as usize);
-}
-
-#[test]
 fn test_image_generation() {
     let width = 20;
     let height = 15;
