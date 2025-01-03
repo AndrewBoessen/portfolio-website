@@ -1,10 +1,10 @@
 import { Canvas, Cell, gen_image } from "website";
 import { memory } from "website/website_bg";
 
-const CELL_SIZE = 20; // px
+const CELL_SIZE = 15; // px
 const GRID_COLOR = "#CCCCCC";
-const NEGATIVE_COLOR = "#FFFFFF";
-const POSITIVE_COLOR = "#000000";
+const NEGATIVE_COLOR = "#000000";
+const POSITIVE_COLOR = "#FFFFFF";
 
 const WIDTH = 96;
 const HEIGHT = 32;
@@ -19,8 +19,8 @@ const height = hopfield_canvas.height();
 hopfield_canvas.randomize();
 
 // Calculate the size needed for each grid including padding
-const GRID_PIXEL_WIDTH = (CELL_SIZE + 1) * GRID_WIDTH + 1;
-const GRID_PIXEL_HEIGHT = (CELL_SIZE + 1) * GRID_HEIGHT + 1;
+const GRID_PIXEL_WIDTH = (CELL_SIZE + 1) * GRID_WIDTH;
+const GRID_PIXEL_HEIGHT = (CELL_SIZE + 1) * GRID_HEIGHT;
 
 // Calculate canvas size to fit all grids
 const canvas = document.getElementById("hopfield-canvas");
@@ -28,7 +28,6 @@ canvas.height = GRID_PIXEL_HEIGHT * height;
 canvas.width = GRID_PIXEL_WIDTH * width;
 
 let image = gen_image(height, width);
-console.log(image);
 
 const ctx = canvas.getContext('2d');
 
@@ -40,25 +39,6 @@ const renderLoop = () => {
   setTimeout(() => { requestAnimationFrame(renderLoop); }, 500);
 };
 
-const drawGridLines = (offsetX, offsetY) => {
-  ctx.beginPath();
-  ctx.strokeStyle = GRID_COLOR;
-
-  // Vertical lines.
-  for (let i = 0; i <= GRID_WIDTH; i++) {
-    ctx.moveTo(offsetX + i * (CELL_SIZE + 1) + 1, offsetY);
-    ctx.lineTo(offsetX + i * (CELL_SIZE + 1) + 1, offsetY + GRID_PIXEL_HEIGHT - 1);
-  }
-
-  // Horizontal lines.
-  for (let j = 0; j <= GRID_HEIGHT; j++) {
-    ctx.moveTo(offsetX, offsetY + j * (CELL_SIZE + 1) + 1);
-    ctx.lineTo(offsetX + GRID_PIXEL_WIDTH - 1, offsetY + j * (CELL_SIZE + 1) + 1);
-  }
-
-  ctx.stroke();
-};
-
 const getIndex = (row, column) => {
   return row * GRID_WIDTH + column;
 };
@@ -68,14 +48,11 @@ const drawGrids = () => {
 
   // Calculate grid positions
   for (let gridIndex = 0; gridIndex < gridsLen; gridIndex++) {
-    const gridRow = Math.floor(gridIndex / width);
-    const gridCol = gridIndex % width;
+    const gridRow = Math.floor(gridIndex / (width / GRID_WIDTH));
+    const gridCol = gridIndex % (width / GRID_WIDTH);
 
     const offsetX = gridCol * GRID_PIXEL_WIDTH;
     const offsetY = gridRow * GRID_PIXEL_HEIGHT;
-
-    // Draw grid lines
-    drawGridLines(offsetX, offsetY);
 
     // Draw cells
     const cellsPtr = hopfield_canvas.get_grids_cells(gridIndex);
@@ -85,13 +62,17 @@ const drawGrids = () => {
     for (let row = 0; row < GRID_HEIGHT; row++) {
       for (let col = 0; col < GRID_WIDTH; col++) {
         const idx = getIndex(row, col);
-        ctx.fillStyle = cells[idx] === Cell.Black
+        let image_idx = (gridRow * GRID_HEIGHT * width) +              // Move to correct grid row
+          (gridCol * GRID_WIDTH) +                       // Move to correct grid column
+          (Math.floor(idx / GRID_WIDTH) * width) + // Move to correct row within grid
+          (idx % GRID_WIDTH);
+        ctx.fillStyle = image[image_idx] === Cell.Black
           ? NEGATIVE_COLOR
           : POSITIVE_COLOR;
 
         ctx.fillRect(
-          offsetX + col * (CELL_SIZE + 1) + 1,
-          offsetY + row * (CELL_SIZE + 1) + 1,
+          offsetX + col * (CELL_SIZE + 1),
+          offsetY + row * (CELL_SIZE + 1),
           CELL_SIZE,
           CELL_SIZE
         );

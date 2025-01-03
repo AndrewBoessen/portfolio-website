@@ -1,4 +1,5 @@
 pub mod hopfield_canvas {
+    use crate::log_i32;
     use rand::Rng;
     use std::ops::Mul;
     use wasm_bindgen::prelude::*;
