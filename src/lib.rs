@@ -1,12 +1,13 @@
 pub mod canvas;
 mod utils;
 
-use crate::canvas::hopfield_canvas::{Canvas, Cell};
+use crate::canvas::hopfield_canvas::Cell;
 use rand::Rng;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub fn gen_image(height: u32, width: u32) -> Vec<Cell> {
+    utils::set_panic_hook();
     let mut rng = rand::thread_rng();
     // linspace for border gradients
     let gradient: Vec<f32> = (0..width / 4)
