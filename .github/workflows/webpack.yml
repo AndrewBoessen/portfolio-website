@@ -25,6 +25,6 @@ jobs:
     - name: Build
       run: |
         npm install wasm-pack
-        wasm-pack build
+        npx wasm-pack build
         npm install
         npx webpack
