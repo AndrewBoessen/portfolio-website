@@ -1,8 +1,7 @@
 import { Canvas, Cell, gen_image } from "website";
 import { memory } from "website/website_bg";
 
-const CELL_SIZE = 15; // px
-const GRID_COLOR = "#CCCCCC";
+// Calculate cell size based on screen width
 const NEGATIVE_COLOR = "#000000";
 const POSITIVE_COLOR = "#FFFFFF";
 
@@ -10,6 +9,8 @@ const WIDTH = 96;
 const HEIGHT = 32;
 const GRID_WIDTH = 8;
 const GRID_HEIGHT = 8;
+
+const CELL_SIZE = Math.floor(window.innerWidth / (WIDTH)) - 1;
 
 // Construct the canvas, and get its width and height.
 const hopfield_canvas = Canvas.new(WIDTH, HEIGHT, GRID_HEIGHT, GRID_WIDTH);
@@ -25,8 +26,14 @@ const GRID_PIXEL_HEIGHT = (CELL_SIZE + 1) * GRID_HEIGHT;
 // Calculate canvas size to fit all grids
 const canvas = document.getElementById("hopfield-canvas");
 canvas.height = GRID_PIXEL_HEIGHT * height;
-canvas.width = GRID_PIXEL_WIDTH * width;
+canvas.width = window.innerWidth;
 
+window.addEventListener('resize', () => {
+  const newCellSize = Math.floor(window.innerWidth / (WIDTH * GRID_WIDTH)) - 1;
+  if (newCellSize !== CELL_SIZE) {
+    location.reload(); // Reload the page to redraw with new cell size
+  }
+});
 let image = gen_image(height, width);
 
 const ctx = canvas.getContext('2d');
@@ -45,13 +52,14 @@ const getIndex = (row, column) => {
 
 const drawGrids = () => {
   const gridsLen = hopfield_canvas.grids_len();
+  const totalWidth = GRID_PIXEL_WIDTH * (WIDTH / GRID_WIDTH);
 
   // Calculate grid positions
   for (let gridIndex = 0; gridIndex < gridsLen; gridIndex++) {
     const gridRow = Math.floor(gridIndex / (width / GRID_WIDTH));
     const gridCol = gridIndex % (width / GRID_WIDTH);
 
-    const offsetX = gridCol * GRID_PIXEL_WIDTH;
+    const offsetX = (gridCol * GRID_PIXEL_WIDTH) + (window.innerWidth - totalWidth) / 2;
     const offsetY = gridRow * GRID_PIXEL_HEIGHT;
 
     // Draw cells
