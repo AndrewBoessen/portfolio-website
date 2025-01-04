@@ -152,20 +152,30 @@ pub mod hopfield_canvas {
         }
 
         pub fn step(&mut self, image: Vec<Cell>) -> bool {
-            let height = self.grid_height;
-            let width = self.grid_width;
+            let grid_width = self.grid_width;
+            let grid_height = self.grid_height;
+            let width = self.width;
+
             // Use iterator to check if any grid was modified
             self.grids
                 .iter_mut()
                 .enumerate()
                 .fold(true, |stable, (index, grid)| {
-                    let grid_start = (index as u32 * width * height) as usize;
-                    let grid_slice = &image[grid_start..grid_start + (width * height) as usize];
-
+                    let grid_col: u32 = index as u32 % (width / grid_width);
+                    let grid_row: u32 = index as u32 / (width / grid_width);
                     // Find cell with minimum energy
                     let (min_index, min_energy) = (0..grid.cells.len())
                         .map(|i| {
-                            let energy = Self::calculate_cell_energy(i, grid_slice, &grid.cells);
+                            let energy = Self::calculate_cell_energy(
+                                i,
+                                grid_col,
+                                grid_row,
+                                width,
+                                grid_width,
+                                grid_height,
+                                &image,
+                                &grid.cells,
+                            );
                             (i, energy)
                         })
                         .min_by_key(|&(_, energy)| energy)
@@ -181,15 +191,50 @@ pub mod hopfield_canvas {
                 })
         }
 
+        // Helper to get id of pixel in image
+        fn get_imge_idx(
+            width: u32,
+            grid_width: u32,
+            grid_height: u32,
+            grid_row: u32,
+            grid_col: u32,
+            idx: u32,
+        ) -> u32 {
+            (grid_row * grid_height * width) // moove to grid row
+                + (grid_col * grid_width) // move to grid column
+                + (idx / grid_width * width) // move to row within grid
+                + (idx % grid_width) // move to col within grid
+        }
+
         // Helper function to calculate energy for a single cell
-        fn calculate_cell_energy(i: usize, image: &[Cell], cells: &[Cell]) -> i32 {
-            let energy = image.iter().enumerate().fold(0, |energy, (j, &w)| {
-                let w_val = (w * image[i]) as i32;
-                energy + (w_val * cells[j] as i32)
+        fn calculate_cell_energy(
+            i: usize,
+            grid_col: u32,
+            grid_row: u32,
+            width: u32,
+            grid_width: u32,
+            grid_height: u32,
+            image: &[Cell],
+            cells: &[Cell],
+        ) -> i32 {
+            let image_idx: usize =
+                Self::get_imge_idx(width, grid_width, grid_height, grid_row, grid_col, i as u32)
+                    as usize;
+            let total_energy = cells.iter().enumerate().fold(0, |energy, (j, &s)| {
+                let curr_image_idx: usize = Self::get_imge_idx(
+                    width,
+                    grid_width,
+                    grid_height,
+                    grid_row,
+                    grid_col,
+                    j as u32,
+                ) as usize;
+                let w_val = (image[curr_image_idx] * image[image_idx]) as i32;
+                energy + (w_val * s as i32)
             });
 
-            // ΔE_i = -2 * y_i * (∑_j w_ij * y_j + b_i)
-            -2 * cells[i] as i32 * (energy + image[i] as i32)
+            // ΔE_i = -2 * y_i * (∑_j w_ij * y_j)
+            -2 * cells[i] as i32 * (total_energy)
         }
 
         pub fn randomize(&mut self) {
@@ -290,11 +335,11 @@ pub mod hopfield_canvas {
             let image = vec![Cell::White, Cell::Black, Cell::White, Cell::Black];
             let cells = vec![Cell::White, Cell::White, Cell::Black, Cell::Black];
 
-            let energy = Canvas::calculate_cell_energy(0, &image, &cells);
-            assert_eq!(energy, -2);
+            let energy = Canvas::calculate_cell_energy(0, 0, 0, 2, 2, 2, &image, &cells);
+            assert_eq!(energy, 0);
 
-            let energy = Canvas::calculate_cell_energy(1, &image, &cells);
-            assert_eq!(energy, 2);
+            let energy = Canvas::calculate_cell_energy(1, 0, 0, 2, 2, 2, &image, &cells);
+            assert_eq!(energy, 0);
         }
 
         #[test]

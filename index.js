@@ -39,11 +39,15 @@ let image = gen_image(height, width);
 const ctx = canvas.getContext('2d');
 
 const renderLoop = () => {
-  hopfield_canvas.step(image);
+  let stable = hopfield_canvas.step(image);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawGrids();
 
-  setTimeout(() => { requestAnimationFrame(renderLoop); }, 500);
+  if (!stable) {
+    setTimeout(() => { requestAnimationFrame(renderLoop); }, 50);
+  } else {
+    return;
+  }
 };
 
 const getIndex = (row, column) => {
@@ -70,11 +74,7 @@ const drawGrids = () => {
     for (let row = 0; row < GRID_HEIGHT; row++) {
       for (let col = 0; col < GRID_WIDTH; col++) {
         const idx = getIndex(row, col);
-        let image_idx = (gridRow * GRID_HEIGHT * width) +              // Move to correct grid row
-          (gridCol * GRID_WIDTH) +                       // Move to correct grid column
-          (Math.floor(idx / GRID_WIDTH) * width) + // Move to correct row within grid
-          (idx % GRID_WIDTH);
-        ctx.fillStyle = image[image_idx] === Cell.Black
+        ctx.fillStyle = cells[idx] === Cell.Black
           ? NEGATIVE_COLOR
           : POSITIVE_COLOR;
 
