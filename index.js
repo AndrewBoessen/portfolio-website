@@ -1,5 +1,5 @@
 import { Canvas, Cell, gen_image } from "website";
-import { memory } from "website/website_bg";
+import { memory } from "website/website_bg.wasm";
 
 // Calculate cell size based on screen width
 const NEGATIVE_COLOR = "#000000";
