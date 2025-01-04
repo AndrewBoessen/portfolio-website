@@ -152,47 +152,53 @@ pub mod hopfield_canvas {
         }
 
         pub fn step(&mut self, image: Vec<Cell>) -> bool {
-            let grid_width = self.grid_width;
-            let grid_height = self.grid_height;
-            let width = self.width;
+            let mut network_stable = true;
+            let mut rng = rand::thread_rng();
 
-            // Use iterator to check if any grid was modified
-            self.grids
-                .iter_mut()
-                .enumerate()
-                .fold(true, |stable, (index, grid)| {
-                    let grid_col: u32 = index as u32 % (width / grid_width);
-                    let grid_row: u32 = index as u32 / (width / grid_width);
-                    // Find cell with minimum energy
-                    let (min_index, min_energy) = (0..grid.cells.len())
-                        .map(|i| {
-                            let energy = Self::calculate_cell_energy(
-                                i,
-                                grid_col,
-                                grid_row,
-                                width,
-                                grid_width,
-                                grid_height,
-                                &image,
-                                &grid.cells,
-                            );
-                            (i, energy)
-                        })
-                        .min_by_key(|&(_, energy)| energy)
-                        .unwrap();
+            // Update each grid independently
+            for (grid_index, grid) in self.grids.iter_mut().enumerate() {
+                let grid_col = grid_index as u32 % (self.width / self.grid_width);
+                let grid_row = grid_index as u32 / (self.width / self.grid_width);
 
-                    // Update cell if energy is negative
-                    if min_energy < 0 {
-                        grid.cells[min_index] = grid.cells[min_index].flip();
-                        stable && false
-                    } else {
-                        stable
+                // Store cells with maximum energy
+                let mut max_energy = 0;
+                let mut max_energy_cells = Vec::new();
+
+                // Find all cells with maximum energy
+                for cell_index in 0..grid.cells.len() {
+                    let energy = Self::calculate_cell_energy(
+                        cell_index,
+                        grid_col,
+                        grid_row,
+                        self.width,
+                        self.grid_width,
+                        self.grid_height,
+                        &image,
+                        &grid.cells,
+                    );
+
+                    if energy > max_energy {
+                        max_energy = energy;
+                        max_energy_cells.clear();
+                        max_energy_cells.push(cell_index);
+                    } else if energy == max_energy && energy > 0 {
+                        max_energy_cells.push(cell_index);
                     }
-                })
+                }
+
+                // Update a randomly chosen cell from those with maximum energy
+                if !max_energy_cells.is_empty() {
+                    let random_index = rng.gen_range(0..max_energy_cells.len());
+                    let cell_to_update = max_energy_cells[random_index];
+                    grid.cells[cell_to_update] = grid.cells[cell_to_update].flip();
+                    network_stable = false;
+                }
+            }
+
+            network_stable
         }
 
-        // Helper to get id of pixel in image
-        fn get_imge_idx(
+        fn get_image_idx(
             width: u32,
             grid_width: u32,
             grid_height: u32,
@@ -200,13 +206,12 @@ pub mod hopfield_canvas {
             grid_col: u32,
             idx: u32,
         ) -> u32 {
-            (grid_row * grid_height * width) // moove to grid row
-                + (grid_col * grid_width) // move to grid column
-                + (idx / grid_width * width) // move to row within grid
+            (grid_row * grid_height * width)  // move to grid row
+                + (grid_col * grid_width)     // move to grid column
+                + (idx / grid_width * width)  // move to row within grid
                 + (idx % grid_width) // move to col within grid
         }
 
-        // Helper function to calculate energy for a single cell
         fn calculate_cell_energy(
             i: usize,
             grid_col: u32,
@@ -217,26 +222,16 @@ pub mod hopfield_canvas {
             image: &[Cell],
             cells: &[Cell],
         ) -> i32 {
-            let image_idx: usize =
-                Self::get_imge_idx(width, grid_width, grid_height, grid_row, grid_col, i as u32)
+            let image_idx =
+                Self::get_image_idx(width, grid_width, grid_height, grid_row, grid_col, i as u32)
                     as usize;
-            let total_energy = cells.iter().enumerate().fold(0, |energy, (j, &s)| {
-                let curr_image_idx: usize = Self::get_imge_idx(
-                    width,
-                    grid_width,
-                    grid_height,
-                    grid_row,
-                    grid_col,
-                    j as u32,
-                ) as usize;
-                let w_val = (image[curr_image_idx] * image[image_idx]) as i32;
-                energy + (w_val * s as i32)
-            });
 
-            // ΔE_i = -2 * y_i * (∑_j w_ij * y_j)
-            -2 * cells[i] as i32 * (total_energy)
+            // Calculate local field (h) for the current cell
+            let local_field = (image[image_idx] as i8) * (cells[i] as i8);
+
+            // Energy is negative of the local field to ensure convergence towards the stored pattern
+            -local_field as i32
         }
-
         pub fn randomize(&mut self) {
             for grid in &mut self.grids {
                 grid.randomize();
@@ -313,8 +308,8 @@ pub mod hopfield_canvas {
             let final_state: Vec<Cell> =
                 canvas.grids.iter().flat_map(|g| g.cells.clone()).collect();
 
-            assert!(!stable);
-            assert_ne!(initial_state, final_state);
+            assert!(stable);
+            assert_eq!(initial_state, final_state);
         }
 
         #[test]
@@ -336,10 +331,10 @@ pub mod hopfield_canvas {
             let cells = vec![Cell::White, Cell::White, Cell::Black, Cell::Black];
 
             let energy = Canvas::calculate_cell_energy(0, 0, 0, 2, 2, 2, &image, &cells);
-            assert_eq!(energy, 0);
+            assert_eq!(energy, -1);
 
             let energy = Canvas::calculate_cell_energy(1, 0, 0, 2, 2, 2, &image, &cells);
-            assert_eq!(energy, 0);
+            assert_eq!(energy, 1);
         }
 
         #[test]
