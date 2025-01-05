@@ -11,6 +11,27 @@ const MOBILE_HEIGHT = 24;
 const DESKTOP_WIDTH = 96;
 const DESKTOP_HEIGHT = 32;
 
+// JavaScript to handle the active menu item
+const sections = document.querySelectorAll('.section');
+const menuLinks = document.querySelectorAll('.menu-bar a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.clientHeight;
+    if (pageYOffset >= sectionTop - sectionHeight / 3) {
+      current = section.getAttribute('id');
+    }
+  });
+
+  menuLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href').includes(current)) {
+      link.classList.add('active');
+    }
+  });
+});
 // Determine if the device is mobile
 function isMobile() {
   return window.innerWidth <= 1200;
