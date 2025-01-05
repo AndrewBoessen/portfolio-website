@@ -1,0 +1,63 @@
+body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+h1 {
+  font-family: 'Lucida Console', monospace;
+  font-size: 600%;
+  font-weight: normal;
+  text-align: center;
+}
+
+h2 {
+  font-family: 'Lucida Console', monospace;
+  font-size: 250%;
+  font-weight: normal;
+}
+
+.centered-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.header {
+  position: absolute;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.links {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.links a {
+  color: black;
+  /* Set link color to black */
+  text-decoration: none;
+  /* Remove underline by default */
+}
+
+.links a:hover {
+  text-decoration: underline;
+  /* Add underline on hover */
+}
