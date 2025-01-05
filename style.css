@@ -28,6 +28,11 @@ h3 {
   font-weight: normal;
 }
 
+p {
+  font-size: 20px;
+  font-weight: normal;
+}
+
 hr {
   border: none;
   height: 4px;
