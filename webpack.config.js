@@ -10,7 +10,7 @@ module.exports = {
     webassemblyModuleFilename: "[hash].wasm",
     publicPath: '/'
   },
-  mode: "development",
+  mode: "production",
   experiments: {
     asyncWebAssembly: true,
     syncWebAssembly: true
@@ -26,8 +26,6 @@ module.exports = {
   plugins: [
     new WasmPackPlugin({
       crateDirectory: path.resolve(__dirname, 'rust'),
-      extraArgs: '--target bundler',
-      forceMode: "development"
     }),
     new CopyWebpackPlugin({
       patterns: [
