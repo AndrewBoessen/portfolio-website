@@ -110,14 +110,21 @@ hr {
 }
 
 .education-section {
-  width: 25%;
+  width: 50%;
   display: flex;
   flex-direction: row;
-  align-content: space-evenly;
-  justify-content: center;
+  align-items: center;
+  /* Centers content vertically */
+  justify-content: space-between;
+  /* Centers content horizontally */
 }
 
 .education-subsection {
   display: flex;
   flex-direction: column;
+  /* Arranges text in a column */
+  align-items: flex-start;
+  /* Centers text horizontally within the column */
+  justify-content: flex-start;
+  /* Centers text vertically within the column */
 }
