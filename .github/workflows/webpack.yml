@@ -17,9 +17,6 @@ jobs:
     - name: Setup Rust
       uses: dtolnay/rust-toolchain@stable
       
-    - name: Install wasm-pack
-      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
@@ -28,9 +25,6 @@ jobs:
      
     - name: Install Dependencies
       run: npm install
-
-    - name: Build Wasm
-      run: wasm-pack build
       
     - name: Build with Webpack
       run: npm run build

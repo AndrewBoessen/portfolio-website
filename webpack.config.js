@@ -7,13 +7,10 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bootstrap.js",
-    webassemblyModuleFilename: "[hash].wasm",
-    publicPath: '/'
   },
   mode: "production",
   experiments: {
     asyncWebAssembly: true,
-    syncWebAssembly: true
   },
   module: {
     rules: [
@@ -25,20 +22,12 @@ module.exports = {
   },
   plugins: [
     new WasmPackPlugin({
-      crateDirectory: path.resolve(__dirname, 'rust'),
+      crateDirectory: path.resolve(__dirname, '.'),
     }),
     new CopyWebpackPlugin({
       patterns: [
         { from: "index.html" }  // Updated to use new CopyWebpackPlugin syntax
       ]
     })
-  ],
-  resolve: {
-    extensions: ['.js', '.wasm'],
-    fallback: {
-      fs: false,
-      path: false,
-      crypto: false
-    }
-  }
+  ]
 };

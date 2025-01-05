@@ -1,5 +1,5 @@
 import { Canvas, Cell, gen_image } from "website";
-import { memory } from "website/website_bg.wasm";
+import { memory } from "website/index_bg.wasm";
 
 // Define colors
 const NEGATIVE_COLOR = "#000000";
@@ -7,7 +7,7 @@ const POSITIVE_COLOR = "#FFFFFF";
 
 // Define grid dimensions
 const MOBILE_WIDTH = 32;
-const MOBILE_HEIGHT = 16;
+const MOBILE_HEIGHT = 24;
 const DESKTOP_WIDTH = 96;
 const DESKTOP_HEIGHT = 32;
 
@@ -80,7 +80,6 @@ const getIndex = (row, column) => {
 // Function to draw the grids
 const drawGrids = () => {
   const gridsLen = hopfield_canvas.grids_len();
-  const totalWidth = GRID_PIXEL_WIDTH * (WIDTH / GRID_WIDTH);
 
   // Calculate grid positions
   for (let gridIndex = 0; gridIndex < gridsLen; gridIndex++) {
