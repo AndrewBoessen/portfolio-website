@@ -7,6 +7,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bootstrap.js",
+    publicPath: "./",  // Ensure assets are referenced relative to the root
   },
   mode: "production",
   experiments: {
@@ -16,18 +17,20 @@ module.exports = {
     rules: [
       {
         test: /\.wasm$/,
-        type: "webassembly/async"
-      }
-    ]
+        type: "webassembly/async",  // Enables async loading of the wasm file
+      },
+    ],
   },
   plugins: [
     new WasmPackPlugin({
-      crateDirectory: path.resolve(__dirname, '.'),
+      crateDirectory: path.resolve(__dirname, '.'),  // Set the crate directory for the Rust code
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: "index.html" },
-      ]
-    })
-  ]
+        { from: "index.html", to: "index.html" },  // Copy the index.html file into dist
+        { from: "pkg", to: "pkg" },  // Copy the pkg folder (which contains .wasm and other resources) into dist
+      ],
+    }),
+  ],
 };
+
