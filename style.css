@@ -28,6 +28,10 @@ h3 {
   font-weight: normal;
 }
 
+h4 {
+  font-size: 22px;
+}
+
 p {
   font-size: 20px;
   font-weight: normal;
@@ -103,4 +107,17 @@ hr {
   padding: 50px 0;
   width: 80%;
   margin: 0 auto;
+}
+
+.education-section {
+  width: 25%;
+  display: flex;
+  flex-direction: row;
+  align-content: space-evenly;
+  justify-content: center;
+}
+
+.education-subsection {
+  display: flex;
+  flex-direction: column;
 }
