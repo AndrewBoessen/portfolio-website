@@ -27,6 +27,7 @@ hr {
   border: none;
   height: 4px;
   background-color: black;
+  margin: 0px;
 }
 
 .centered-stack {
