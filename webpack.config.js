@@ -28,6 +28,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: "index.html", to: "index.html" },  // Copy the index.html file into dist
+        { from: "style.css", to: "style.css" },
       ],
     }),
   ],

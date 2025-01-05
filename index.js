@@ -13,7 +13,7 @@ const DESKTOP_HEIGHT = 32;
 
 // Determine if the device is mobile
 function isMobile() {
-  return window.innerWidth <= 1000;
+  return window.innerWidth <= 1200;
 }
 
 // Set grid dimensions based on device type
