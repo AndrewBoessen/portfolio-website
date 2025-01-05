@@ -65,7 +65,7 @@ hr {
 
 .links a:hover {
   text-decoration: underline;
-  text-decoration-thickness: 6px;
+  text-decoration-thickness: 4px;
   /* Add underline on hover */
 }
 
@@ -84,7 +84,7 @@ hr {
 
 .menu-bar a.active h3 {
   text-decoration: underline;
-  text-decoration-thickness: 4px;
+  text-decoration-thickness: 2px;
   text-underline-offset: 4px;
 }
 
