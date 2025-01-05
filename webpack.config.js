@@ -29,7 +29,6 @@ module.exports = {
       patterns: [
         { from: "index.html", to: "index.html" },  // Copy the index.html file into dist
         { from: "style.css", to: "style.css" },
-        { from: "pkg", to: "pkg" },  // Copy the pkg folder (which contains .wasm and other resources) into dist
       ],
     }),
   ],
