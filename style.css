@@ -110,12 +110,13 @@ hr {
 }
 
 .education-section {
-  width: 50%;
+  width: 100%;
   display: flex;
+  gap: 50px;
   flex-direction: row;
   align-items: center;
   /* Centers content vertically */
-  justify-content: space-between;
+  justify-content: flex-start;
   /* Centers content horizontally */
 }
 
@@ -127,4 +128,5 @@ hr {
   /* Centers text horizontally within the column */
   justify-content: flex-start;
   /* Centers text vertically within the column */
+  align-content: flex-start;
 }
