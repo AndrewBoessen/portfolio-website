@@ -23,17 +23,19 @@ const WIDTH = isMobile() ? MOBILE_WIDTH : DESKTOP_WIDTH;
 const HEIGHT = isMobile() ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
 
 // Calculate cell size based on screen width
-const CELL_SIZE = (window.innerWidth / WIDTH) - 2;
+const CELL_SIZE = (window.innerWidth / WIDTH) - 4;
 
 // Construct the canvas
 const hopfield_canvas = Canvas.new(WIDTH, HEIGHT, GRID_HEIGHT, GRID_WIDTH);
 const width = hopfield_canvas.width();
 const height = hopfield_canvas.height();
+
+// random starting cell values
 hopfield_canvas.randomize();
 
 // Calculate the size needed for each grid including padding
-const GRID_PIXEL_WIDTH = (CELL_SIZE + 2) * GRID_WIDTH;
-const GRID_PIXEL_HEIGHT = (CELL_SIZE + 2) * GRID_HEIGHT;
+const GRID_PIXEL_WIDTH = (CELL_SIZE + 4) * GRID_WIDTH;
+const GRID_PIXEL_HEIGHT = (CELL_SIZE + 4) * GRID_HEIGHT;
 
 // Get the canvas element and set its size
 const canvas = document.getElementById("hopfield-canvas");
@@ -42,7 +44,7 @@ canvas.width = GRID_PIXEL_WIDTH * (width / GRID_WIDTH);
 
 // Function to handle window resize
 function handleResize() {
-  const newCellSize = Math.floor(window.innerWidth / WIDTH) - 2;
+  const newCellSize = Math.floor(window.innerWidth / WIDTH) - 4;
   if (newCellSize !== CELL_SIZE) {
     location.reload();
   }
@@ -102,8 +104,8 @@ const drawGrids = () => {
           : POSITIVE_COLOR;
 
         ctx.fillRect(
-          offsetX + col * (CELL_SIZE + 2),
-          offsetY + row * (CELL_SIZE + 2),
+          offsetX + col * (CELL_SIZE + 4),
+          offsetY + row * (CELL_SIZE + 4),
           CELL_SIZE,
           CELL_SIZE
         );

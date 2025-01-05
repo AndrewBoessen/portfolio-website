@@ -10,3 +10,34 @@ body {
   align-items: center;
   justify-content: flex-start;
 }
+
+h1 {
+  font-family: 'Lucida Console', monospace;
+  font-size: 600%;
+  font-weight: normal;
+  text-align: center;
+}
+
+h2 {
+  font-family: 'Lucida Console', monospace;
+  font-size: 250%;
+  font-weight: normal;
+}
+
+.header {
+  position: absolute;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.links {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}

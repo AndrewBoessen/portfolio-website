@@ -13,7 +13,7 @@ pub mod hopfield_canvas {
 
     impl Default for Cell {
         fn default() -> Self {
-            Cell::White
+            Cell::Black
         }
     }
 
