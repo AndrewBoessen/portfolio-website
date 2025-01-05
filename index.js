@@ -66,7 +66,7 @@ canvas.width = GRID_PIXEL_WIDTH * (width / GRID_WIDTH);
 // Function to handle window resize
 function handleResize() {
   const newCellSize = Math.floor(window.innerWidth / WIDTH) - 4;
-  if (newCellSize !== CELL_SIZE) {
+  if (newCellSize !== Math.floor(CELL_SIZE)) {
     location.reload();
   }
 }
