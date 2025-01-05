@@ -1,0 +1,77 @@
+body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: 'Source Code Pro', 'Lucida Console', Monaco, 'Courier New', Consolas, monospace;
+}
+
+h1 {
+  font-size: 600%;
+  font-weight: normal;
+  text-align: center;
+}
+
+h2 {
+  font-size: 250%;
+  font-weight: normal;
+}
+
+hr {
+  border: none;
+  height: 4px;
+  background-color: black;
+  margin: 0px;
+}
+
+.centered-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.header {
+  position: absolute;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.links {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.links a {
+  color: black;
+  /* Set link color to black */
+  text-decoration: none;
+  /* Remove underline by default */
+}
+
+.links a:hover {
+  text-decoration: underline;
+  /* Add underline on hover */
+}
+
+.menu-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
