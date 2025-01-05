@@ -26,7 +26,8 @@ module.exports = {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: "index.html" }  // Updated to use new CopyWebpackPlugin syntax
+        { from: "index.html" },
+        { from: path.resolve(__dirname, "pkg"), to: "pkg" }
       ]
     })
   ]

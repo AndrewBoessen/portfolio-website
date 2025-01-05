@@ -1,5 +1,5 @@
-import { Canvas, Cell, gen_image } from "website";
-import { memory } from "website/index_bg.wasm";
+import { Canvas, Cell, gen_image } from "./pkg/index";
+import { memory } from "./pkg/index_bg.wasm";
 
 // Define colors
 const NEGATIVE_COLOR = "#000000";
