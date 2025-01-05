@@ -13,18 +13,19 @@ body {
 }
 
 h1 {
-  font-size: 600%;
+  font-size: 96px;
   font-weight: normal;
   text-align: center;
 }
 
 h2 {
-  font-size: 250%;
+  font-size: 40px;
   font-weight: normal;
 }
 
 h3 {
-  font-size: 125%;
+  font-size: 24px;
+  font-weight: normal;
 }
 
 hr {
