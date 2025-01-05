@@ -23,6 +23,12 @@ h2 {
   font-weight: normal;
 }
 
+hr {
+  border: none;
+  height: 4px;
+  background-color: black;
+}
+
 .centered-stack {
   display: flex;
   flex-direction: column;
@@ -59,4 +65,12 @@ h2 {
 .links a:hover {
   text-decoration: underline;
   /* Add underline on hover */
+}
+
+.menu-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 }
