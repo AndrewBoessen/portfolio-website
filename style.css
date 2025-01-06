@@ -175,7 +175,7 @@ li {
 }
 
 /* Mobile-specific adjustments */
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1250px) {
   .experience-section {
     flex-direction: column;
     /* Stacks items vertically on mobile */
