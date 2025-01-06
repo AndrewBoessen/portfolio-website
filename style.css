@@ -174,6 +174,32 @@ li {
   /* Adds space between logo and content on mobile */
 }
 
+.project-section {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 50px;
+  flex-wrap: wrap;
+  /* Allows wrapping on smaller screens */
+}
+
+.project-subsection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 35%;
+}
+
+.project-thumbnail {
+  object-fit: cover;
+  border: 4px solid black;
+  height: 250px;
+  width: 250px;
+}
+
 /* Mobile-specific adjustments */
 @media only screen and (max-width: 1250px) {
   .experience-section {
@@ -196,12 +222,30 @@ li {
     margin-bottom: 10px;
     /* Adds space between logo and content on mobile */
   }
+
+  .project-thumbnail {
+    object-fit: cover;
+    border: 4px solid black;
+    height: 200px;
+    width: 200px;
+  }
 }
 
 @media only screen and (max-width: 480px) {
   .garmin-logo {
     width: 100px;
     /* Further adjust logo size for smaller mobile screens */
+  }
+
+  .bc-logo {
+    height: 75px;
+    width: 75px;
+  }
+
+  .project-thumbnail {
+    border: 2px solid black;
+    height: 100px;
+    width: 100px;
   }
 }
 
@@ -243,6 +287,12 @@ li {
   .bc-logo {
     height: 75px;
     width: 75px;
+  }
+
+  .project-thumbnail {
+    border: 2px solid black;
+    height: 100px;
+    width: 100px;
   }
 }
 
@@ -286,10 +336,5 @@ li {
 
   .menu-bar a.active h3 {
     text-decoration-thickness: 1px;
-  }
-
-  .bc-logo {
-    height: 75px;
-    width: 75px;
   }
 }
