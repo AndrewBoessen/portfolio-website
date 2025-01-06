@@ -338,6 +338,10 @@ li {
     /* Add some spacing between list items */
   }
 
+  .section {
+    width: 90%;
+  }
+
   .menu-bar a.active h3 {
     text-decoration-thickness: 1px;
   }
