@@ -44,6 +44,18 @@ hr {
   margin: 0px;
 }
 
+ul {
+  font-size: 20px;
+  /* Same as p tag for consistency */
+}
+
+li {
+  font-size: 20px;
+  /* For better readability on mobile */
+  margin-bottom: 8px;
+  /* Add some spacing between list items */
+}
+
 .centered-stack {
   display: flex;
   flex-direction: column;
@@ -136,6 +148,63 @@ hr {
   width: 100px;
 }
 
+.experience-section {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 50px;
+  flex-wrap: wrap;
+  /* Allows wrapping on smaller screens */
+}
+
+.experience-subsection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 35%;
+}
+
+.garmin-logo {
+  height: auto;
+  width: 200px;
+  margin-bottom: 20px;
+  /* Adds space between logo and content on mobile */
+}
+
+/* Mobile-specific adjustments */
+@media only screen and (max-width: 768px) {
+  .experience-section {
+    flex-direction: column;
+    /* Stacks items vertically on mobile */
+    align-items: center;
+    /* Centers items on mobile */
+    gap: 20px;
+    /* Reduces gap between items on mobile */
+  }
+
+  .experience-subsection {
+    width: 100%;
+    /* Full width on mobile */
+  }
+
+  .garmin-logo {
+    width: 150px;
+    /* Adjust logo size for mobile */
+    margin-bottom: 10px;
+    /* Adds space between logo and content on mobile */
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .garmin-logo {
+    width: 100px;
+    /* Further adjust logo size for smaller mobile screens */
+  }
+}
+
 /* Mobile font scaling */
 @media only screen and (max-width: 768px) {
   h1 {
@@ -156,6 +225,19 @@ hr {
 
   p {
     font-size: 16px;
+  }
+
+  ul {
+    font-size: 12px;
+    /* Same as p tag for consistency */
+  }
+
+  li {
+    font-size: 12px;
+    line-height: 1.4;
+    /* For better readability on mobile */
+    margin-bottom: 8px;
+    /* Add some spacing between list items */
   }
 
   .bc-logo {
@@ -187,6 +269,19 @@ hr {
 
   hr {
     height: 2px;
+  }
+
+  ul {
+    font-size: 12px;
+    /* Same as p tag for consistency */
+  }
+
+  li {
+    font-size: 12px;
+    line-height: 1.4;
+    /* For better readability on mobile */
+    margin-bottom: 8px;
+    /* Add some spacing between list items */
   }
 
   .menu-bar a.active h3 {
