@@ -125,23 +125,19 @@ li {
 .education-section {
   width: 100%;
   display: flex;
-  gap: 50px;
   flex-direction: row;
-  align-items: center;
-  /* Centers content vertically */
+  align-items: flex-start;
   justify-content: flex-start;
-  /* Centers content horizontally */
+  gap: 50px;
+  flex-wrap: wrap;
 }
 
 .education-subsection {
   display: flex;
   flex-direction: column;
-  /* Arranges text in a column */
   align-items: flex-start;
-  /* Centers text horizontally within the column */
   justify-content: flex-start;
-  /* Centers text vertically within the column */
-  align-content: flex-start;
+  width: 75%;
 }
 
 .bc-logo {
@@ -359,6 +355,20 @@ li {
     /* For better readability on mobile */
     margin-bottom: 8px;
     /* Add some spacing between list items */
+  }
+
+  .education-section {
+    flex-direction: column;
+    /* Stacks items vertically on mobile */
+    align-items: center;
+    /* Centers items on mobile */
+    gap: 20px;
+    /* Reduces gap between items on mobile */
+  }
+
+  .education-subsection {
+    width: 100%;
+    /* Full width on mobile */
   }
 
   .bc-logo {
