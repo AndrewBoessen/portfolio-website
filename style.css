@@ -177,7 +177,7 @@ li {
 .project-section {
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 50px;
@@ -187,10 +187,10 @@ li {
 
 .project-subsection {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 35%;
+  gap: 50px;
 }
 
 .project-thumbnail {
@@ -240,6 +240,10 @@ li {
   .bc-logo {
     height: 75px;
     width: 75px;
+  }
+
+  .project-subsection {
+    gap: 20px;
   }
 
   .project-thumbnail {
