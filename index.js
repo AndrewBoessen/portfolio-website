@@ -37,6 +37,88 @@ function isMobile() {
   return window.innerWidth <= 1200;
 }
 
+// List of ISBN numbers for the books
+const isbnList = [
+  "9781429955195",
+  "9781922240040",
+  "9780190948221",
+  "0465026567",
+  "9780307827661",
+  "9780393542028",
+  "9781493938438",
+  "9780128119068",
+  "9781429927215",
+  "0140077022",
+  "192224001X",
+  "9780679720218",
+  "9780061745171",
+  "0262193981",
+  "9780608033204",
+  "9780679734529",
+];
+
+
+// Function to fetch book details from Google Books API
+async function fetchBookDetails(isbn) {
+  const response = await fetch(
+    `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
+  );
+  const data = await response.json();
+
+  if (data.items && data.items.length > 0) {
+    const bookInfo = data.items[0].volumeInfo;
+    return {
+      title: bookInfo.title,
+      cover: bookInfo.imageLinks?.thumbnail || "https://via.placeholder.com/150x200", // Fallback image
+      previewLink: bookInfo.previewLink || `https://books.google.com/books?isbn=${isbn}`, // Fallback to Google Books search
+    };
+  } else {
+    return null; // No book found for this ISBN
+  }
+}
+
+// Function to display books on the bookshelf
+async function displayBookshelf() {
+  const bookshelfContainer = document.querySelector('.bookshelf-container');
+
+  for (const isbn of isbnList) {
+    const bookDetails = await fetchBookDetails(isbn);
+
+    if (bookDetails) {
+      const bookItem = document.createElement('div');
+      bookItem.classList.add('book-item');
+
+      // Create a hyperlink for the book cover
+      const bookLink = document.createElement('a');
+      bookLink.href = bookDetails.previewLink;
+      bookLink.target = "_blank"; // Open link in a new tab
+      bookLink.rel = "noopener noreferrer"; // Security best practice
+
+      const bookCover = document.createElement('img');
+      bookCover.classList.add('book-cover');
+      bookCover.src = bookDetails.cover;
+      bookCover.alt = bookDetails.title;
+
+      const bookTitle = document.createElement('div');
+      bookTitle.classList.add('book-title');
+      bookTitle.textContent = bookDetails.title;
+
+      // Append the cover image to the hyperlink
+      bookLink.appendChild(bookCover);
+
+      // Append the hyperlink and title to the book item
+      bookItem.appendChild(bookLink);
+      bookItem.appendChild(bookTitle);
+
+      // Append the book item to the bookshelf container
+      bookshelfContainer.appendChild(bookItem);
+    }
+  }
+}
+
+// Call the function to display the bookshelf
+displayBookshelf();
+
 // Set grid dimensions based on device type
 const GRID_WIDTH = 8;
 const GRID_HEIGHT = 8;
