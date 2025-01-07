@@ -57,11 +57,12 @@ const isbnList = [
   "9780679734529",
 ];
 
+const GOOGLE_API_KEY = "AIzaSyB4VVtK4KcfmQouHGaIgA3PWsmpmn3e9Qg";
 
 // Function to fetch book details from Google Books API
 async function fetchBookDetails(isbn) {
   const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
+    `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_API_KEY}`
   );
   const data = await response.json();
 
