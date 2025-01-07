@@ -298,6 +298,10 @@ li {
     height: 200px;
     width: 200px;
   }
+
+  .bookshelf-container {
+    gap: 40px;
+  }
 }
 
 @media only screen and (max-width: 480px) {
