@@ -6,10 +6,14 @@ const NEGATIVE_COLOR = "#000000";
 const POSITIVE_COLOR = "#FFFFFF";
 
 // Define grid dimensions
-const MOBILE_WIDTH = 32;
-const MOBILE_HEIGHT = 24;
+const MOBILE_WIDTH = 64;
+const MOBILE_HEIGHT = 48;
 const DESKTOP_WIDTH = 96;
 const DESKTOP_HEIGHT = 32;
+
+// Define pixel per cell in grid
+const MOBILE_PIXELS = 2;
+const DESKTOP_PIXELS = 4;
 
 // JavaScript to handle the active menu item
 const sections = document.querySelectorAll('.section');
@@ -127,9 +131,10 @@ const GRID_WIDTH = 8;
 const GRID_HEIGHT = 8;
 const WIDTH = isMobile() ? MOBILE_WIDTH : DESKTOP_WIDTH;
 const HEIGHT = isMobile() ? MOBILE_HEIGHT : DESKTOP_HEIGHT;
+const PIXELS = isMobile() ? MOBILE_PIXELS : DESKTOP_PIXELS;
 
 // Calculate cell size based on screen width
-const CELL_SIZE = (window.innerWidth / WIDTH) - 4;
+const CELL_SIZE = (window.innerWidth / WIDTH) - PIXELS;
 
 // Construct the canvas
 const hopfield_canvas = Canvas.new(WIDTH, HEIGHT, GRID_HEIGHT, GRID_WIDTH);
@@ -140,8 +145,8 @@ const height = hopfield_canvas.height();
 hopfield_canvas.randomize();
 
 // Calculate the size needed for each grid including padding
-const GRID_PIXEL_WIDTH = (CELL_SIZE + 4) * GRID_WIDTH;
-const GRID_PIXEL_HEIGHT = (CELL_SIZE + 4) * GRID_HEIGHT;
+const GRID_PIXEL_WIDTH = (CELL_SIZE + PIXELS) * GRID_WIDTH;
+const GRID_PIXEL_HEIGHT = (CELL_SIZE + PIXELS) * GRID_HEIGHT;
 
 // Get the canvas element and set its size
 const canvas = document.getElementById("hopfield-canvas");
@@ -150,7 +155,7 @@ canvas.width = GRID_PIXEL_WIDTH * (width / GRID_WIDTH);
 
 // Function to handle window resize
 function handleResize() {
-  const newCellSize = Math.floor(window.innerWidth / WIDTH) - 4;
+  const newCellSize = Math.floor(window.innerWidth / WIDTH) - PIXELS;
   if (newCellSize !== Math.floor(CELL_SIZE)) {
     location.reload();
   }
@@ -209,8 +214,8 @@ const drawGrids = () => {
           : POSITIVE_COLOR;
 
         ctx.fillRect(
-          offsetX + col * (CELL_SIZE + 4),
-          offsetY + row * (CELL_SIZE + 4),
+          offsetX + col * (CELL_SIZE + PIXELS),
+          offsetY + row * (CELL_SIZE + PIXELS),
           CELL_SIZE,
           CELL_SIZE
         );
