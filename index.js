@@ -6,8 +6,8 @@ const NEGATIVE_COLOR = "#000000";
 const POSITIVE_COLOR = "#FFFFFF";
 
 // Define grid dimensions
-const MOBILE_WIDTH = 64;
-const MOBILE_HEIGHT = 48;
+const MOBILE_WIDTH = 56;
+const MOBILE_HEIGHT = 40;
 const DESKTOP_WIDTH = 96;
 const DESKTOP_HEIGHT = 32;
 
