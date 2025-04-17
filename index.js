@@ -43,6 +43,8 @@ function isMobile() {
 
 // List of ISBN numbers for the books
 const isbnList = [
+  "9780810112001",
+  "9780451523105",
   "9780307787477",
   "9780810111752",
   "9781429955195",
