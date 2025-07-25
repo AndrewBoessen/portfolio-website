@@ -3,24 +3,27 @@
 
 <head>
   <title>Andrew Boessen Portfolio</title>
+  <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link rel="preload" href="./static/SourceCodePro.ttf" as="font" type="font/ttf" crossorigin>
 </head>
 
 <body>
-  <div class="centered-stack">
+  <div id="hopfield-network">
     <canvas id="hopfield-canvas"></canvas>
-    <script src='./bootstrap.js'></script>
-    <div class="header">
-      <h1>Andrew Boessen</h1>
-      <div class="links">
-        <a href="https://github.com/AndrewBoessen" target="_blank">
-          <h2>GitHub</h2>
-        </a>
-        <a href="https://linkedin.com/in/andrew-boessen" target="_blank">
-          <h2>LinkedIn</h2>
-        </a>
+    <div class="centered-stack">
+      <script src='./bootstrap.js'></script>
+      <div class="header">
+        <h1>Andrew Boessen</h1>
+        <div class="links">
+          <a href="https://github.com/AndrewBoessen" target="_blank">
+            <h2>GitHub</h2>
+          </a>
+          <a href="https://linkedin.com/in/andrew-boessen" target="_blank">
+            <h2>LinkedIn</h2>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -59,7 +62,7 @@
     <div class="education-section">
       <img
         src="https://upload.wikimedia.org/wikipedia/en/thumb/0/00/Boston_College_seal.svg/1200px-Boston_College_seal.svg.png"
-        alt="Boston College" class="bc-logo">
+        alt="Boston College" class="bc-logo" width="100" height="100">
       <div class="education-subsection">
         <h4>Boston College</h4>
         <p>2022 - 2026</p>
@@ -73,7 +76,7 @@
     <h2>Experience</h2>
     <div class="experience-section">
       <img src="https://cdn.freebiesupply.com/logos/large/2x/garmin-2-logo-png-transparent.png" alt="Garmin"
-        class="garmin-logo">
+        class="garmin-logo" width="200" height="68">
       <div class="experience-subsection">
         <h4>Device Interaction (Intern)</h4>
         <p>2024</p>
@@ -104,7 +107,7 @@
         <a href="https://github.com/AndrewBoessen/neural-game-engine" target="_blank" class="project-link">
           <img class="project-thumbnail"
             src="https://github.com/AndrewBoessen/neural-game-engine/blob/main/assets/game.gif?raw=true"
-            alt="NeuralGameEngine">
+            alt="NeuralGameEngine" width="250" height="250">
         </a>
         <div class="project-text">
           <h4>Neural Game Engine</h4>
@@ -116,7 +119,8 @@
       <div class="project-subsection">
         <a href="https://github.com/AndrewBoessen/PerfectRep" target="_blank" class="project-link">
           <img class="project-thumbnail"
-            src="https://github.com/AndrewBoessen/PerfectRep/blob/main/assets/lift.gif?raw=true" alt="PerfectRep">
+            src="https://github.com/AndrewBoessen/PerfectRep/blob/main/assets/lift.gif?raw=true" alt="PerfectRep"
+            width="250" height="250">
         </a>
         <div class="project-text">
           <h4>Perfect Rep</h4>
@@ -127,7 +131,7 @@
       <div class="project-subsection">
         <a href="https://github.com/AndrewBoessen/CUDAGrad" target="_blank" class="project-link">
           <img class="project-thumbnail" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Gradient_descent.gif"
-            alt="CUDAGrad">
+            alt="CUDAGrad" width="250" height="250">
         </a>
         <div class="project-text">
           <h4>CUDA Grad</h4>
@@ -140,7 +144,7 @@
         <a href="https://github.com/AndrewBoessen/cuda-native-sparse-attention" target="_blank" class="project-link">
           <img class="project-thumbnail"
             src="https://github.com/AndrewBoessen/cuda-native-sparse-attention/blob/main/assets/simple-pretty-gif.gif?raw=true"
-            alt="Native Sparse Attention">
+            alt="Native Sparse Attention" width="250" height="250">
         </a>
         <div class="project-text">
           <h4>Native Sparse Attention</h4>
@@ -152,7 +156,7 @@
         <a href="https://github.com/AndrewBoessen/EagleEval" target="_blank" class="project-link">
           <img class="project-thumbnail"
             src="https://github.com/AndrewBoessen/EagleEval/blob/main/src/assets/ezgif.com-crop.gif?raw=true"
-            alt="EagleEval">
+            alt="EagleEval" width="250" height="250">
         </a>
         <div class="project-text">
           <h4>Eagle Eval</h4>
@@ -163,7 +167,7 @@
       <div class="project-subsection">
         <a href="https://github.com/AndrewBoessen/Bitonic-Merge-Sort" target="_blank" class="project-link">
           <img class="project-thumbnail" src="https://static.wikitide.net/sortingalgoswiki/0/05/BitonicRecursive.gif"
-            alt="MergeSort">
+            alt="MergeSort" width="250" height="250">
         </a>
         <div class="project-text">
           <h4>Bitonic Merge Sort</h4>
@@ -175,7 +179,8 @@
       <div class="project-subsection">
         <a href="https://github.com/AndrewBoessen/Re-Clip" target="_blank" class="project-link">
           <img class="project-thumbnail"
-            src="https://github.com/AndrewBoessen/Re-Clip/blob/main/assets/scroll.gif?raw=true" alt="ReClip">
+            src="https://github.com/AndrewBoessen/Re-Clip/blob/main/assets/scroll.gif?raw=true" alt="ReClip" width="250"
+            height="250">
         </a>
         <div class="project-text">
           <h4>Re-Clip</h4>

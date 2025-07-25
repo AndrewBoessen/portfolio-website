@@ -1,15 +1,14 @@
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./static/SourceCodePro.ttf') format('truetype');
+}
+
 body {
-  position: absolute;
   overflow-x: hidden;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: 100vh;
-  margin: 0px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  margin: 0;
   font-family: 'Source Code Pro', 'Lucida Console', Monaco, 'Courier New', Consolas, monospace;
 }
 
@@ -62,17 +61,32 @@ li {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 33vw;
+}
+
+#hopfield-network {
   position: relative;
+  width: 100%;
+  height: 33vw;
+  overflow: hidden;
+}
+
+#hopfield-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 
 .header {
-  position: absolute;
   width: 50%;
+  height: 33vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
 }
 
 .links {
@@ -120,6 +134,7 @@ li {
   padding: 50px 0;
   width: 80%;
   margin: 0 auto;
+  min-height: 20vh;
 }
 
 .education-section {
@@ -143,6 +158,7 @@ li {
 .bc-logo {
   height: 100px;
   width: 100px;
+  aspect-ratio: 1 / 1;
 }
 
 .experience-section {
@@ -167,6 +183,7 @@ li {
 .garmin-logo {
   height: auto;
   width: 200px;
+  aspect-ratio: 200 / 68;
   margin-bottom: 20px;
   /* Adds space between logo and content on mobile */
 }
@@ -203,6 +220,7 @@ li {
   border: 4px solid black;
   height: 250px;
   width: 250px;
+  aspect-ratio: 1 / 1;
 }
 
 .bookshelf-container {
@@ -219,6 +237,13 @@ li {
   align-items: center;
   width: 150px;
   text-align: center;
+}
+
+.book-item-placeholder {
+  border: 4px solid black;
+  height: 200px;
+  width: 150px;
+  background-color: #f0f0f0;
 }
 
 .book-cover {
@@ -239,6 +264,12 @@ li {
     width: 100px;
   }
 
+  .book-item-placeholder {
+    border: 2px solid black;
+    height: 150px;
+    width: 100px;
+  }
+
   .book-cover {
     width: 100px;
     height: 150px;
@@ -255,6 +286,11 @@ li {
     width: 80px;
   }
 
+  .book-item-placeholder {
+    height: 120px;
+    width: 80px;
+  }
+
   .book-cover {
     width: 80px;
     height: 120px;
@@ -266,7 +302,20 @@ li {
 }
 
 /* Mobile-specific adjustments */
-@media only screen and (max-width: 1250px) {
+@media only screen and (max-width: 1200px) {
+  .centered-stack {
+    height: 71vw;
+  }
+
+  .header {
+    height: 71vw;
+  }
+
+  #hopfield-network {
+    height: 71vw;
+    overflow: hidden;
+  }
+
   .experience-section {
     flex-direction: column;
     /* Stacks items vertically on mobile */
