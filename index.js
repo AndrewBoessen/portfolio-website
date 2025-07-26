@@ -86,11 +86,25 @@ async function fetchBookDetails(isbn) {
   }
 }
 
+// Function to create placeholder elements for the books
+function createBookPlaceholders() {
+  const bookshelfContainer = document.querySelector('.bookshelf-container');
+  bookshelfContainer.innerHTML = ''; // Clear existing content
+
+  isbnList.forEach(() => {
+    const placeholder = document.createElement('div');
+    placeholder.classList.add('book-item', 'book-item-placeholder');
+    bookshelfContainer.appendChild(placeholder);
+  });
+}
+
 // Function to display books on the bookshelf
 async function displayBookshelf() {
   const bookshelfContainer = document.querySelector('.bookshelf-container');
+  const placeholderItems = document.querySelectorAll('.book-item-placeholder');
 
-  for (const isbn of isbnList) {
+  for (let i = 0; i < isbnList.length; i++) {
+    const isbn = isbnList[i];
     const bookDetails = await fetchBookDetails(isbn);
 
     if (bookDetails) {
@@ -107,6 +121,8 @@ async function displayBookshelf() {
       bookCover.classList.add('book-cover');
       bookCover.src = bookDetails.cover;
       bookCover.alt = bookDetails.title;
+      bookCover.width = 150;
+      bookCover.height = 200;
 
       const bookTitle = document.createElement('div');
       bookTitle.classList.add('book-title');
@@ -119,13 +135,18 @@ async function displayBookshelf() {
       bookItem.appendChild(bookLink);
       bookItem.appendChild(bookTitle);
 
-      // Append the book item to the bookshelf container
-      bookshelfContainer.appendChild(bookItem);
+      // Replace the placeholder with the new book item
+      if (i < placeholderItems.length) {
+        bookshelfContainer.replaceChild(bookItem, placeholderItems[i]);
+      } else {
+        bookshelfContainer.appendChild(bookItem);
+      }
     }
   }
 }
 
-// Call the function to display the bookshelf
+// Create placeholders and then display the bookshelf
+createBookPlaceholders();
 displayBookshelf();
 
 // Set grid dimensions based on device type
