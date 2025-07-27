@@ -78,7 +78,7 @@ async function fetchBookDetails(isbn) {
     const bookInfo = data.items[0].volumeInfo;
     return {
       title: bookInfo.title,
-      cover: bookInfo.imageLinks?.thumbnail || "https://via.placeholder.com/150x200", // Fallback image
+      cover: (bookInfo.imageLinks?.thumbnail || "https://via.placeholder.com/150x200").replace('http://', 'https://'),
       previewLink: bookInfo.previewLink || `https://books.google.com/books?isbn=${isbn}`, // Fallback to Google Books search
     };
   } else {
