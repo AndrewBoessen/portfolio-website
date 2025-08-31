@@ -183,7 +183,7 @@ li {
 .garmin-logo {
   height: auto;
   width: 200px;
-  aspect-ratio: 200 / 68;
+  aspect-ratio: 200 / 54;
   margin-bottom: 20px;
   /* Adds space between logo and content on mobile */
 }
