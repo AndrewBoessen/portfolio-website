@@ -10,6 +10,8 @@ body {
   overflow-x: hidden;
   margin: 0;
   font-family: 'Source Code Pro', 'Lucida Console', Monaco, 'Courier New', Consolas, monospace;
+  background-color: white;
+  color: black;
 }
 
 h1 {
