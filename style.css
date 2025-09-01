@@ -9,9 +9,9 @@
 body {
   overflow-x: hidden;
   margin: 0;
-  font-family: 'Berkeley Mono', 'Lucida Console', Monaco, 'Courier New', Consolas, monospace;
   background-color: white;
   color: black;
+  font-family: 'Berkeley Mono', 'Lucida Console', Monaco, 'Courier New', Consolas, monospace;
 }
 
 h1 {
