@@ -10,6 +10,8 @@ body {
   overflow-x: hidden;
   margin: 0;
   font-family: 'Source Code Pro', 'Lucida Console', Monaco, 'Courier New', Consolas, monospace;
+  background-color: white;
+  color: black;
 }
 
 h1 {
@@ -243,7 +245,7 @@ li {
   border: 4px solid black;
   height: 200px;
   width: 150px;
-  background-color: #f0f0f0;
+  background-color: white;
 }
 
 .book-cover {
