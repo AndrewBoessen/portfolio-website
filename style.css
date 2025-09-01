@@ -1,17 +1,17 @@
 @font-face {
-  font-family: 'Source Code Pro';
+  font-family: 'Berkeley Mono';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('./static/SourceCodePro.ttf') format('truetype');
+  src: url('./static/Berkeley Mono Regular.woff2') format('truetype');
 }
 
 body {
   overflow-x: hidden;
   margin: 0;
-  font-family: 'Source Code Pro', 'Lucida Console', Monaco, 'Courier New', Consolas, monospace;
   background-color: white;
   color: black;
+  font-family: 'Berkeley Mono', 'Lucida Console', Monaco, 'Courier New', Consolas, monospace;
 }
 
 h1 {
@@ -95,6 +95,7 @@ li {
   width: 100%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-evenly;
 }
