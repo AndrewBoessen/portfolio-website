@@ -191,6 +191,20 @@ li {
   /* Adds space between logo and content on mobile */
 }
 
+.project-link a {
+  color: black;
+  /* Set link color to black */
+  text-decoration: none;
+  /* Remove underline by default */
+}
+
+.project-link a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+  /* Add underline on hover */
+}
+
 .project-section {
   width: 100%;
   display: flex;
