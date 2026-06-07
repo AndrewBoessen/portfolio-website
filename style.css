@@ -185,10 +185,8 @@ li {
 
 .garmin-logo {
   height: auto;
-  width: 200px;
-  aspect-ratio: 200 / 54;
-  margin-bottom: 20px;
-  /* Adds space between logo and content on mobile */
+  width: 250px;
+  aspect-ratio: auto;
 }
 
 .project-link a {
@@ -348,10 +346,7 @@ li {
   }
 
   .garmin-logo {
-    width: 150px;
-    /* Adjust logo size for mobile */
-    margin-bottom: 10px;
-    /* Adds space between logo and content on mobile */
+    width: 200px;
   }
 
   .project-text {
@@ -372,8 +367,7 @@ li {
 
 @media only screen and (max-width: 480px) {
   .garmin-logo {
-    width: 100px;
-    /* Further adjust logo size for smaller mobile screens */
+    width: 150px;
   }
 
   .bc-logo {
