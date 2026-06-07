@@ -30,6 +30,7 @@ module.exports = {
         { from: "index.html", to: "index.html" },  // Copy the index.html file into dist
         { from: "style.css", to: "style.css" },
         { from: "static", to: "static" },
+        { from: "assets", to: "assets" },  // Copy the assets folder (images) into dist
       ],
     }),
   ],
